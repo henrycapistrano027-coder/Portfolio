@@ -431,7 +431,7 @@ function sendEmail(){
     reply_to: email
   };
 
-  // SEND EMAIL TO YOU
+  // 1. SEND TO YOU (contact form)
   emailjs.send(
     "service_69yj6af",
     "template_a6znh8p",
@@ -439,19 +439,17 @@ function sendEmail(){
     "Pa-PzT1jVj2K4OK2jP"
   )
 
-  .then(function(response) {
-    console.log("SUCCESS!", response.status, response.text);
-
-    // AUTO REPLY TO USER
+  // 2. AUTO REPLY TO USER
+  .then(() => {
     return emailjs.send(
       "service_69yj6af",
       "template_voqlri3",
       params,
-      "Pa-PzT1jVj2K4OK2j"
+      "Pa-PzT1jVj2K4OK2jP"
     );
   })
 
-  .then(function() {
+  .then(() => {
     showToast("Message sent successfully!", "success");
 
     document.getElementById("from_name").value = "";
@@ -459,16 +457,12 @@ function sendEmail(){
     document.getElementById("message").value = "";
   })
 
-  .catch(function(error) {
-    console.error("FAILED...", error);
-
-    showToast(
-      "Oops! Something went wrong. Try emailing me directly.",
-      "error"
-    );
+  .catch((error) => {
+    console.error("EmailJS error:", error);
+    showToast("Oops! Something went wrong. Try emailing me directly.", "error");
   })
 
-  .finally(function() {
+  .finally(() => {
     btn.disabled = false;
     btn.textContent = "Send Message";
   });
