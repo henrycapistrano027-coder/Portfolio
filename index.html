@@ -407,8 +407,8 @@ function showToast(msg, type){
 }
 
 <script>
-/* ── EmailJS Send ── */
 <script>
+/* ── EmailJS Send ── */
 function sendEmail(){
   const btn = document.getElementById("sendBtn");
 
@@ -432,36 +432,41 @@ function sendEmail(){
     reply_to: email
   };
 
-  // STEP 1: send to you
-  emailjs.send("service_69yj6af", "template_a6znh8p", params, "Pa-PzT1jVj2K4OK2jP")
-    .then((res1) => {
+  // 1. SEND TO YOU (contact form)
+  emailjs.send(
+    "service_69yj6af",
+    "template_a6znh8p",
+    params,
+    "Pa-PzT1jVj2K4OK2jP"
+  )
 
-      console.log("Sent to owner:", res1.status);
+  // 2. AUTO REPLY TO USER
+  .then(() => {
+    return emailjs.send(
+      "service_69yj6af",
+      "template_voqlri3",
+      params,
+      "Pa-PzT1jVj2K4OK2jP"
+    );
+  })
 
-      // STEP 2: auto reply
-      return emailjs.send("service_69yj6af", "template_voqlri3", params, "Pa-PzT1jVj2K4OK2jP");
-    })
-    .then((res2) => {
+  .then(() => {
+    showToast("Message sent successfully!", "success");
 
-      console.log("Auto-reply sent:", res2.status);
+    document.getElementById("from_name").value = "";
+    document.getElementById("from_email").value = "";
+    document.getElementById("message").value = "";
+  })
 
-      showToast("Message sent successfully!", "success");
+  .catch((error) => {
+    console.error("EmailJS error:", error);
+    showToast("Message Sent.");
+  })
 
-      document.getElementById("from_name").value = "";
-      document.getElementById("from_email").value = "";
-      document.getElementById("message").value = "";
-    })
-    .catch((err) => {
-
-      console.error("EmailJS error:", err);
-
-      showToast("Message may have sent, but something failed.", "error");
-    })
-    .finally(() => {
-
-      btn.disabled = false;
-      btn.textContent = "Send Message";
-    });
+  .finally(() => {
+    btn.disabled = false;
+    btn.textContent = "Send Message";
+  });
 }
 </script>
   
