@@ -406,9 +406,11 @@ function showToast(msg, type){
   setTimeout(()=>{ t.classList.remove("show"); }, 4500);
 }
 
+<script>
 /* ── EmailJS Send ── */
 function sendEmail(){
   const btn = document.getElementById("sendBtn");
+
   const name = document.getElementById("from_name").value.trim();
   const email = document.getElementById("from_email").value.trim();
   const msg = document.getElementById("message").value.trim();
@@ -425,9 +427,53 @@ function sendEmail(){
     from_name: name,
     from_email: email,
     message: msg,
-    to_name: "Henry"
+    to_name: "Henry",
+    reply_to: email
   };
 
+  // SEND EMAIL TO YOU
+  emailjs.send(
+    "service_69yj6af",
+    "template_a6znh8p",
+    params,
+    "Pa-PzT1jVj2K4OK2j"
+  )
+
+  .then(function(response) {
+    console.log("SUCCESS!", response.status, response.text);
+
+    // AUTO REPLY TO USER
+    return emailjs.send(
+      "service_69yj6af",
+      "template_voqlri3",
+      params,
+      "Pa-PzT1jVj2K4OK2j"
+    );
+  })
+
+  .then(function() {
+    showToast("Message sent successfully!", "success");
+
+    document.getElementById("from_name").value = "";
+    document.getElementById("from_email").value = "";
+    document.getElementById("message").value = "";
+  })
+
+  .catch(function(error) {
+    console.error("FAILED...", error);
+
+    showToast(
+      "Oops! Something went wrong. Try emailing me directly.",
+      "error"
+    );
+  })
+
+  .finally(function() {
+    btn.disabled = false;
+    btn.textContent = "Send Message";
+  });
+}
+</script>
   // Send contact notification to Henry
   emailjs.send("service_69yj6af", "template_a6znh8p", params)
     .then(() => {
