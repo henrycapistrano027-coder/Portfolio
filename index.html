@@ -464,27 +464,8 @@ function sendEmail(){
     });
 }
 </script>
-  // Send contact notification to Henry
-  emailjs.send("service_69yj6af", "template_a6znh8p", params)
-    .then(() => {
-      // Send auto-reply to the sender
-      return emailjs.send("service_69yj6af", "template_voqlri3", params);
-    })
-    .then(() => {
-      showToast("Message sent! I'll get back to you soon.", "success");
-      document.getElementById("from_name").value = "";
-      document.getElementById("from_email").value = "";
-      document.getElementById("message").value = "";
-    })
-    .catch((err) => {
-      console.error("EmailJS error:", err);
-      showToast("Oops! Something went wrong. Try emailing me directly.", "error");
-    })
-    .finally(() => {
-      btn.disabled = false;
-      btn.textContent = "Send Message";
-    });
-}
+  
+  
 </script>
 </body>
 </html>
